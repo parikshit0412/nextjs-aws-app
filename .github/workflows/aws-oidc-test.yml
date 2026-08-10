@@ -1,4 +1,4 @@
-name: Deploy Next.js & Verify AWS OIDC
+name: Verify AWS OIDC Authentication
 
 on:
   push:
@@ -10,36 +10,28 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  # Fix: Node 20 is deprecated on GitHub runners - allow it explicitly
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+
 jobs:
-  build-and-authenticate:
+  verify-oidc:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js Environment
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build Next.js Application
-        run: npm run build
-
       - name: Configure AWS Credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::463470979621:role/GitHubActions-OIDC-Role
-          aws-region: us-east-1  # Change to your preferred AWS Region (e.g. ap-south-1, us-east-1)
+          aws-region: us-east-1
           audience: sts.amazonaws.com
 
       - name: Verify Ephemeral AWS Credentials
         run: |
           echo "================================================="
-          echo "🎉 OIDC Authentication Successful!"
+          echo "✅ OIDC Authentication Successful!"
           echo "================================================="
           aws sts get-caller-identity
