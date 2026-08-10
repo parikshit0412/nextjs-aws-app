@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Next.js AWS OIDC Practice Application
 
-## Getting Started
+This is your standalone Next.js 15 application created to practice **AWS IAM OIDC Authentication** with **GitHub Actions**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📂 Project Structure
+* `src/app/page.tsx` - Next.js App Router main page.
+* `.github/workflows/aws-oidc-test.yml` - GitHub Actions workflow with OIDC configuration.
+
+---
+
+## 🛠️ Step-by-Step Hands-on Instructions
+
+### Step 1: Replace Account ID in `.github/workflows/aws-oidc-test.yml`
+Open [.github/workflows/aws-oidc-test.yml](file:///d:/learn_AWS_with_AI/nextjs-aws-app/.github/workflows/aws-oidc-test.yml) and replace `YOUR_AWS_ACCOUNT_ID` with your actual 12-digit AWS Account ID.
+
+```yaml
+role-to-assume: arn:aws:iam::123456789012:role/GitHubActions-OIDC-Role
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Step 2: Push this Repository to GitHub
+In your terminal, navigate to this project folder:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cd d:\learn_AWS_with_AI\nextjs-aws-app
+git add .
+git commit -m "feat: setup Next.js app with AWS OIDC workflow"
+```
 
-## Learn More
+Create a new repository on your GitHub account (e.g. `nextjs-aws-app`), then link and push:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+git remote add origin https://github.com/YOUR_GITHUB_USERNAME/nextjs-aws-app.git
+git branch -M main
+git push -u origin main
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Step 3: Run AWS OIDC Setup
+Ensure you have completed **Step 1 & Step 2** from [PRACTICE_LAB_01_OIDC.md](file:///d:/learn_AWS_with_AI/express-api/aws_interview_prep/PRACTICE_LAB_01_OIDC.md) in your AWS Console:
+1. Created OIDC Provider `https://token.actions.githubusercontent.com`.
+2. Created `GitHubActions-OIDC-Role` in IAM with condition matching `repo:YOUR_GITHUB_USERNAME/nextjs-aws-app:*`.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Step 4: Check GitHub Actions Execution
+1. Go to `https://github.com/YOUR_GITHUB_USERNAME/nextjs-aws-app/actions`.
+2. Open the **Deploy Next.js & Verify AWS OIDC** workflow run.
+3. Observe Next.js building, followed by AWS OIDC authenticating via temporary STS credentials!
