@@ -2,11 +2,15 @@
 
 This is your standalone Next.js 15 application created to practice **AWS IAM OIDC Authentication** with **GitHub Actions**.
 
+> 📖 **Read the Full Incident Report & Architecture Guide:** [OIDC_INCIDENT_LESSONS_LEARNED.md](file:///d:/learn_AWS_with_AI/nextjs-aws-app/OIDC_INCIDENT_LESSONS_LEARNED.md)
+
 ---
 
 ## 📂 Project Structure
 * `src/app/page.tsx` - Next.js App Router main page.
 * `.github/workflows/aws-oidc-test.yml` - GitHub Actions workflow with OIDC configuration.
+* `OIDC_INCIDENT_LESSONS_LEARNED.md` - Complete incident report & debugging guide.
+
 
 ---
 
