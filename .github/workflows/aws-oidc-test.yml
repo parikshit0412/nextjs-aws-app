@@ -5,13 +5,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# CRITICAL: Grant id-token permission to request the JWT token from GitHub OIDC
 permissions:
   id-token: write
   contents: read
 
 env:
-  # Fix: Node 20 is deprecated on GitHub runners - allow it explicitly
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
 jobs:
@@ -21,6 +19,19 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: DEBUG - Decode GitHub OIDC Token Claims
+        run: |
+          TOKEN=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | jq -r '.value')
+          echo "====== OIDC JWT PAYLOAD ======"
+          echo $TOKEN | cut -d'.' -f2 | python3 -c "
+          import sys, base64, json
+          d = sys.stdin.read().strip()
+          d += '==' * (-len(d) % 4)
+          print(json.dumps(json.loads(base64.b64decode(d)), indent=2))
+          "
+          echo "=============================="
 
       - name: Configure AWS Credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
@@ -32,6 +43,6 @@ jobs:
       - name: Verify Ephemeral AWS Credentials
         run: |
           echo "================================================="
-          echo "✅ OIDC Authentication Successful!"
+          echo "SUCCESS - OIDC Authentication Successful!"
           echo "================================================="
           aws sts get-caller-identity
